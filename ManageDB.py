@@ -1,6 +1,5 @@
 from api_key import api_key
 import os
-import pandas as pd
 import pymysql
 
 class ManageDB:
@@ -12,8 +11,8 @@ class ManageDB:
             user="root",
             password="",
             database="stocks"
-        ),
-        self.cursor = db.cursor()
+        )
+        self.cursor = self.db.cursor()
 
     def create_stockprice_table(self):
         column_names = ["IBM, TSLA", "AAPL", "MSFT", "AMZN"]
@@ -21,13 +20,13 @@ class ManageDB:
         self.cursor.execute(sql)
         self.db.commit()
 
-        for column_name in column_names:
-            # Define the SQL query to create the column
-            sql_query = f"ALTER TABLE stockprices ADD {column_name} VARCHAR(255)"
-
-            # Execute the query
-            self.cursor.execute(sql_query)
-            self.db.commit()
+        # for column_name in column_names:
+        #     # Define the SQL query to create the column
+        #     sql_query = f"ALTER TABLE stockprices ADD {column_name} VARCHAR(255)"
+        #
+        #     # Execute the query
+        #     self.cursor.execute(sql_query)
+        #     self.db.commit()
 
     #interval options: INTRADAY / INTRADAY_EXTENDED / DAILY / DAILY_ADJUSTED / WEEKLY / WEEKLY_ADJUSTED / MONTHLY / MONTHLY_ADJUSTED
     def get_time_series(self, interval):
