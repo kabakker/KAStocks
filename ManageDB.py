@@ -9,15 +9,13 @@ class ManageDB:
         self.cursor = self.db.cursor()
 
     def create_stockprice_table(self):
-        column_names = ["IBM", "TSLA", "AAPL", "MSFT", "AMZN"]
-        sql = "CREATE TABLE stock_prices (id INT AUTO_INCREMENT PRIMARY KEY, date DATE)"
+        sql = "CREATE TABLE stock_prices_daily_adjusted (date DATE PRIMARY KEY)"
         self.cursor.execute(sql)
         self.db.commit()
-
+        column_names = ["open", "high", "low", "close", "adjustedClose", "volume", "dividendAmount", "splitCoefficient"]
         for column_name in column_names:
             # Define the SQL query to create the column
-            sql_query = f"ALTER TABLE stockprices ADD {column_name} VARCHAR(255)"
-
+            sql_query = f"ALTER TABLE stock_prices_daily_adjusted ADD {column_name} FLOAT"
             # Execute the query
             self.cursor.execute(sql_query)
             self.db.commit()
@@ -30,6 +28,8 @@ class ManageDB:
             stock_df = pd.read_csv("https://www.alphavantage.co/query?function=TIME_SERIES_"+interval+"&symbol="+stock_symbol+"&outputsize=full&datatype=csv"+"&apikey="+api_key)
             stock_df.to_csv(interval+"/"+stock_symbol+".csv")
 
-
-db = ManageDB()
-db.create_company_info_table()
+    def search_stock(self, search_term):
+        sql_query = f"SELECT * FROM sp500 WHERE Symbol LIKE '%{search_term}%' OR Security LIKE '%{search_term}%' OR `GICS Sector` LIKE '%{search_term}%' OR `GICS Sub-Industry` LIKE '%{search_term}%' OR `Headquarters Location` LIKE '%{search_term}%';"
+        self.cursor.execute(sql_query)
+        temp =  self.cursor.fetchall()
+        return temp

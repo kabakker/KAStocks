@@ -1,16 +1,17 @@
-# This is a sample Python script.
+from flask import Flask, render_template, request
+from ManageDB import ManageDB
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+app = Flask(__name__)
+db = ManageDB()
 
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        searchTerm = request.form['text']
+        search_result = db.search_stock(searchTerm)
+        return render_template('index.html', search_result=search_result)
+    else:
+        return render_template('index.html')
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    app.run()

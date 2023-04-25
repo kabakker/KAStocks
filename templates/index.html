@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Find Stocks</title>
+</head>
+<body>
+<h1>Find Stocks</h1>
+<form method="POST">
+    <input type="text" name="text">
+    <button type="submit">Convert</button>
+</form>
+
+{% for outer_tuple in search_result %}
+<p>
+    {% for inner_element in outer_tuple %}
+    {{ inner_element }}
+    {% if not loop.last %}, {% endif %}
+    {% endfor %}
+</p>
+{% endfor %}
+
+</body>
+</html>
