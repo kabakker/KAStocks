@@ -1,22 +1,16 @@
-from api_key import api_key
+from privateObjects import *
 import os
 import pymysql
 
 class ManageDB:
 
     def __init__(self):
-        self.db = pymysql.connect(
-            host="stockdatabase.cnetw8lhwpm6.eu-north-1.rds.amazonaws.com",
-            port=3306,
-            user="KNOEN",
-            password="koenihvj2000",
-            database="Dev"
-        )
+        self.db = local_db
         self.cursor = self.db.cursor()
 
     def create_stockprice_table(self):
         column_names = ["IBM", "TSLA", "AAPL", "MSFT", "AMZN"]
-        sql = "CREATE TABLE stockprices (id INT AUTO_INCREMENT PRIMARY KEY, date DATE)"
+        sql = "CREATE TABLE stock_prices (id INT AUTO_INCREMENT PRIMARY KEY, date DATE)"
         self.cursor.execute(sql)
         self.db.commit()
 
@@ -38,4 +32,4 @@ class ManageDB:
 
 
 db = ManageDB()
-db.create_stockprice_table()
+db.create_company_info_table()
